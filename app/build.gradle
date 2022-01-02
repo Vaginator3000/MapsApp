@@ -54,11 +54,17 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
     //viewBinding
-    implementation 'com.github.kirich1409:viewbindingpropertydelegate:1.5.0-beta01'
+    implementation 'com.github.kirich1409:viewbindingpropertydelegate:1.5.3'
 
     //coroutines
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.1'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1'
+
+  //  // TedPermission with Coroutine
+  //  implementation 'io.github.ParkSangGwon:tedpermission-coroutine:3.3.0'
+
+    // TedPermission
+    implementation 'io.github.ParkSangGwon:tedpermission-normal:3.3.0'
 
     //Yandex MapKit
     implementation 'com.yandex.android:maps.mobile:4.0.0-lite'
