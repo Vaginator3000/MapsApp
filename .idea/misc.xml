@@ -5,8 +5,10 @@
       <map>
         <entry key="..\:/Android/MapsApp/app/src/main/res/layout/activity_main.xml" value="0.29907407407407405" />
         <entry key="..\:/Android/MapsApp/app/src/main/res/layout/fragment_home.xml" value="0.2109375" />
+        <entry key="..\:/Android/MapsApp/app/src/main/res/layout/fragment_login.xml" value="0.33" />
         <entry key="..\:/Android/MapsApp/app/src/main/res/layout/fragment_map.xml" value="0.2109375" />
         <entry key="..\:/Android/MapsApp/app/src/main/res/layout/fragment_places.xml" value="0.2109375" />
+        <entry key="..\:/Android/MapsApp/app/src/main/res/layout/login_fragment.xml" value="0.19270833333333334" />
         <entry key="..\:/Android/MapsApp/app/src/main/res/menu/bottom_nav_menu.xml" value="0.375" />
       </map>
     </option>

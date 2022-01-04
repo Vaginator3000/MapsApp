@@ -1,11 +1,11 @@
 package com.template.mapsapp.ui.map
 
 import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import by.kirich1409.viewbindingdelegate.CreateMethod
@@ -15,19 +15,25 @@ import com.yandex.mapkit.Animation
 import com.yandex.mapkit.MapKitFactory
 import com.yandex.mapkit.geometry.Point
 import com.yandex.mapkit.map.CameraPosition
-import com.gun0912.tedpermission.PermissionListener
-import com.gun0912.tedpermission.normal.TedPermission
 import com.yandex.mapkit.layers.ObjectEvent
 import com.yandex.mapkit.user_location.UserLocationObjectListener
 import com.yandex.mapkit.user_location.UserLocationView
 import android.graphics.Color
 import com.yandex.mapkit.map.RotationType
 import android.graphics.PointF
+import android.util.Log
+import androidx.core.app.ActivityCompat
+import com.gun0912.tedpermission.coroutine.TedPermission
 import com.template.mapsapp.R
 import com.yandex.mapkit.map.IconStyle
 import com.yandex.runtime.image.ImageProvider
 import com.yandex.mapkit.map.CompositeIcon
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
+
+// Сюда пока сильно не смотрите, просто разбираюсь с картами. Потом будет рефактор
 
 class MapFragment : Fragment(), UserLocationObjectListener {
     private val binding: FragmentMapBinding by viewBinding(CreateMethod.INFLATE)
@@ -37,21 +43,24 @@ class MapFragment : Fragment(), UserLocationObjectListener {
 
     private val mapViewModel by lazy { ViewModelProvider(this).get(MapViewModel::class.java) }
 
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         initMap()
-        if(requireLocationPermission())
-            setMapOnCurrentLocation()
+        CoroutineScope(Dispatchers.Default).launch {
+            if (requireLocationPermission())
+                this.launch(Dispatchers.Main) {
+                    setMapOnCurrentLocation()
+                }
+        }
         return binding.root
     }
 
-    private fun requireLocationPermission(): Boolean {
-        var result = false
-        val permissionListener = object : PermissionListener {
+    private suspend fun requireLocationPermission(): Boolean {
+
+       /* val permissionListener = object : PermissionListener {
             override fun onPermissionGranted() {
                 result = true
             }
@@ -62,22 +71,28 @@ class MapFragment : Fragment(), UserLocationObjectListener {
                     "Доступ к местоположению запрещен!",
                     Toast.LENGTH_SHORT
                 ).show();
+                result = false
             }
-        }
-
+        }*/
 
         TedPermission.create()
-            .setPermissionListener(permissionListener)
-            .setDeniedMessage("If you reject permission,you can not use this service\n\nPlease turn on permissions at [Setting] > [Permission]")
+        //    .setPermissionListener(permissionListener)
+         //   .setDeniedMessage("If you reject permission,you can not use this service\n\nPlease turn on permissions at [Setting] > [Permission]")
             .setPermissions(Manifest.permission.ACCESS_FINE_LOCATION)
             .check()
 
-        return result
+        val result =
+            ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
 
+        return result
     }
 
     override fun onStart() {
         super.onStart()
+    //    MapKitFactory.getInstance().onStart()
         mapKitFactory.onStart()
         binding.mapview.onStart()
     }
@@ -86,6 +101,7 @@ class MapFragment : Fragment(), UserLocationObjectListener {
         MapKitFactory.setApiKey(getString(R.string.mapkit_api_key))
         MapKitFactory.initialize(this.requireContext())
 
+        binding.mapview.map.isRotateGesturesEnabled = false
 
         binding.mapview.map.move(
             CameraPosition(Point(55.751574, 37.573856), 11.0f, 0.0f, 0.0f),
@@ -94,24 +110,26 @@ class MapFragment : Fragment(), UserLocationObjectListener {
         )
     }
 
-    private fun setMapOnCurrentLocation() {
+    private suspend fun setMapOnCurrentLocation() {
 
         userLocationLayer.isVisible = true
         userLocationLayer.isHeadingEnabled = true
 
         userLocationLayer.setObjectListener(this)
 
-        if(userLocationLayer.cameraPosition() != null)
-            binding.mapview.map.move(userLocationLayer.cameraPosition()!!)
+
+        Log.e("AA", "1")
     }
 
     override fun onStop() {
         super.onStop()
+      //  MapKitFactory.getInstance().onStop()
         mapKitFactory.onStop()
         binding.mapview.onStop()
     }
 
     override fun onObjectAdded(userLocationView: UserLocationView) {
+        Log.e("AA", "2")
         with(binding) {
             userLocationLayer.setAnchor(
                 PointF((mapview.width * 0.5).toFloat(), (mapview.height * 0.5).toFloat()),

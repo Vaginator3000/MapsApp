@@ -1,9 +1,13 @@
 <resources>
     <string name="app_name">MapsApp</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_map">Map</string>
+    <string name="title_places">Places</string>
 
 
     <string name="mapkit_api_key">e20bd7e7-8453-4bba-a703-43d5a1f79610</string>
+    <string name="login_hint">Логин</string>
+    <string name="email_hint">E-mail</string>
+    <string name="password_hint">Пароль</string>
+    <string name="repeat_password_hint">Повторите пароль</string>
+    <string name="accept_text">Согласен с правилами</string>
 </resources>

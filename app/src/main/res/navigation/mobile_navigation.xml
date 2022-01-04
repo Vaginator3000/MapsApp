@@ -3,18 +3,27 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_map">
+    app:startDestination="@+id/login_fragment">
+
+    <fragment
+        android:id="@+id/login_fragment"
+        android:name="com.template.mapsapp.ui.login.LoginFragment"
+        tools:layout="@layout/fragment_login" >
+        <action
+            android:id="@+id/action_login_fragment_to_navigation_map"
+            app:destination="@id/navigation_map" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_map"
         android:name="com.template.mapsapp.ui.map.MapFragment"
-        android:label="@string/title_home"
+        android:label="@string/title_map"
         tools:layout="@layout/fragment_map" />
 
     <fragment
         android:id="@+id/navigation_places"
         android:name="com.template.mapsapp.ui.places.PlacesFragment"
-        android:label="@string/title_dashboard"
+        android:label="@string/title_places"
         tools:layout="@layout/fragment_places" />
 
 </navigation>

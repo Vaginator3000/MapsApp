@@ -10,3 +10,6 @@ rootProject.name = "MapsApp"
 include ':app'
 include ':domain'
 include ':data'
+include ':utils'
+include ':utils'
+include ':models'
