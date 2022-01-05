@@ -11,7 +11,7 @@
         tools:layout="@layout/fragment_login" >
         <action
             android:id="@+id/action_login_fragment_to_navigation_map"
-            app:destination="@id/navigation_map" />
+            app:destination="@id/navigation_map"/>
     </fragment>
 
     <fragment

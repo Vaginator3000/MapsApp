@@ -9,9 +9,9 @@ class SharedPrefsUsers(context: Context) {
     private val sPrefs = context.getSharedPreferences("data", Context.MODE_PRIVATE)
     private val gson = Gson()
 
-    fun isUserExist(loginOrEmail: String) : Boolean {
+    fun isUserExist(login: String, email: String) : Boolean {
         getAllUsers().forEach { user ->
-            if (user.email == loginOrEmail || user.login == loginOrEmail)
+            if (user.email == email || user.login == login)
                 return true
         }
         return false
@@ -41,9 +41,13 @@ class SharedPrefsUsers(context: Context) {
     }
 
     fun addUser(user: LoginUserModel) {
-        val users =
-            getAllUsers() as MutableList<LoginUserModel>
-        users.add(user)
+        var users = getAllUsers()
+        if (users.isEmpty())
+            users = listOf(user)
+        else {
+            users as MutableList
+            users.add(user)
+        }
         saveUsers(users)
     }
 

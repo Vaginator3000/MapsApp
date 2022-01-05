@@ -14,7 +14,6 @@
             <option value="$PROJECT_DIR$/data" />
             <option value="$PROJECT_DIR$/domain" />
             <option value="$PROJECT_DIR$/models" />
-            <option value="$PROJECT_DIR$/util" />
             <option value="$PROJECT_DIR$/utils" />
           </set>
         </option>
