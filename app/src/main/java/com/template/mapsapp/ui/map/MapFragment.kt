@@ -1,6 +1,7 @@
 package com.template.mapsapp.ui.map
 
 import android.Manifest
+import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -92,13 +93,13 @@ class MapFragment : Fragment(), UserLocationObjectListener {
 
     override fun onStart() {
         super.onStart()
-    //    MapKitFactory.getInstance().onStart()
+        MapKitFactory.getInstance().onStart()
         mapKitFactory.onStart()
         binding.mapview.onStart()
     }
 
     private fun initMap() {
-        MapKitFactory.setApiKey(getString(R.string.mapkit_api_key))
+      //  MapKitFactory.setApiKey(getString(R.string.mapkit_api_key))
         MapKitFactory.initialize(this.requireContext())
 
         binding.mapview.map.isRotateGesturesEnabled = false
@@ -117,8 +118,6 @@ class MapFragment : Fragment(), UserLocationObjectListener {
 
         userLocationLayer.setObjectListener(this)
 
-
-        Log.e("AA", "1")
     }
 
     override fun onStop() {
@@ -145,14 +144,14 @@ class MapFragment : Fragment(), UserLocationObjectListener {
 
         val pinIcon: CompositeIcon = userLocationView.pin.useCompositeIcon()
 
-        pinIcon.setIcon(
+       /* pinIcon.setIcon(
             "icon",
             ImageProvider.fromResource(requireContext(), R.drawable.icon),
             IconStyle().setAnchor(PointF(0f, 0f))
                 .setRotationType(RotationType.ROTATE)
                 .setZIndex(0f)
                 .setScale(1f)
-        )
+        )*/
 
         pinIcon.setIcon(
             "pin",
@@ -171,6 +170,5 @@ class MapFragment : Fragment(), UserLocationObjectListener {
     }
 
     override fun onObjectUpdated(p0: UserLocationView, p1: ObjectEvent) {
-        TODO("Not yet implemented")
     }
 }

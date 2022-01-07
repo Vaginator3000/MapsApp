@@ -5,16 +5,20 @@ import com.template.domain.login.Authentication
 import com.template.models.LoginUserModel
 
 class SharedPrefsAuthenticationImpl(context: Context) : Authentication {
-    private val sharedPrefsUsers = SharedPrefsUsers(context)
+    private val sharedPrefsDB = SharedPrefsDB(context)
 
     override fun authenticationByData(loginOrEmail: String, password: String) : Boolean {
-        return sharedPrefsUsers.authenticateByData(
+        return sharedPrefsDB.authenticateByData(
             loginOrEmail = loginOrEmail,
             password = password
         )
     }
 
     override fun authenticationBySession() : LoginUserModel? {
-        return sharedPrefsUsers.authenticateBySession()
+        return sharedPrefsDB.authenticateBySession()
+    }
+
+    override fun saveSession(loginOrEmail: String) {
+        return sharedPrefsDB.saveSession(loginOrEmail)
     }
 }

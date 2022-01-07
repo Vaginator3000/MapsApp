@@ -20,6 +20,14 @@ class LoginViewModel(app: Application) : AndroidViewModel(app) {
     val text: LiveData<String> = _text
     */
 
+    fun authBySession() : LoginUserModel? {
+        return sharedPrefsAuthImpl.authenticationBySession()
+    }
+
+    fun saveSession(loginOrEmail: String) {
+        sharedPrefsAuthImpl.saveSession(loginOrEmail)
+    }
+
     fun checkUserData(loginOrEmail: String, password: String) : Boolean {
         return sharedPrefsAuthImpl.authenticationByData(loginOrEmail = loginOrEmail, password = password)
     }

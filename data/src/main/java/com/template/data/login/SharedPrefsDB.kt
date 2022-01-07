@@ -5,7 +5,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.template.models.LoginUserModel
 
-class SharedPrefsUsers(context: Context) {
+class SharedPrefsDB(context: Context) {
     private val sPrefs = context.getSharedPreferences("data", Context.MODE_PRIVATE)
     private val gson = Gson()
 
@@ -34,7 +34,8 @@ class SharedPrefsUsers(context: Context) {
         return user
     }
 
-    fun saveSession(user: LoginUserModel) {
+    fun saveSession(loginOrEmail: String) {
+        val user = getUserByLoginOrEmail(loginOrEmail)
         sPrefs.edit()
             .putString("session", gson.toJson(user))
             .apply()
@@ -49,6 +50,10 @@ class SharedPrefsUsers(context: Context) {
             users.add(user)
         }
         saveUsers(users)
+    }
+
+    private fun getUserByLoginOrEmail(loginOrEmail: String) : LoginUserModel {
+        return getAllUsers().first { it.email == loginOrEmail || it.login == loginOrEmail }
     }
 
     private fun getAllUsers(): List<LoginUserModel> {

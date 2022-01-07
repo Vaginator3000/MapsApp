@@ -11,6 +11,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.template.mapsapp.databinding.ActivityMainBinding
+import com.yandex.mapkit.MapKitFactory
 
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
@@ -44,6 +45,9 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
                 navView.visibility = View.VISIBLE
             }
         }
+
+
+        MapKitFactory.setApiKey(getString(R.string.mapkit_api_key))
     }
 
     override fun onBackPressed() {

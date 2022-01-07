@@ -1,5 +1,6 @@
 package com.template.mapsapp.ui.login
 
+import android.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.util.Log
@@ -8,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.DialogFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navOptions
 import by.kirich1409.viewbindingdelegate.CreateMethod
@@ -15,6 +17,7 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import com.template.mapsapp.R
 import com.template.mapsapp.databinding.FragmentLoginBinding
 import com.template.models.LoginUserModel
+import kotlin.math.log
 
 class LoginFragment : Fragment() {
     private val binding: FragmentLoginBinding by viewBinding(CreateMethod.INFLATE)
@@ -27,8 +30,10 @@ class LoginFragment : Fragment() {
     ): View {
         setAuthMode()
         setOnClicks()
+        tryAuthBySession()
         return binding.root
     }
+
 
     private fun setOnClicks() {
         with(binding) {
@@ -45,8 +50,8 @@ class LoginFragment : Fragment() {
                 val password = (passwordEditText.text ?: return@setOnClickListener).toString()
                 if (checkFieldsAreNotEmpty() ) {
                     if (loginViewModel.checkUserData(loginOrEmail, password)) {
-                        val navController = findNavController()
-                        navController.navigate(R.id.action_login_fragment_to_navigation_map)
+                        showSaveSessionDialog(loginOrEmail = loginOrEmail)
+                        navigateToNextFragment()
                     }
                     else
                         showToast("Неверный логин или пароль!")
@@ -65,17 +70,49 @@ class LoginFragment : Fragment() {
                     else {
                         loginViewModel.addUser(
                             user = LoginUserModel(
-                                login = login,
-                                password = pass1,
-                                email = email
-                            )
-                        )
-                        val navController = findNavController()
-                        navController.navigate(R.id.action_login_fragment_to_navigation_map)
+                            login = login,
+                            password = pass1,
+                            email = email
+                        ))
+                        showSaveSessionDialog(loginOrEmail = login)
+                        navigateToNextFragment()
                     }
                 }
             }
         }
+    }
+
+    private fun navigateToNextFragment() {
+        val navController = findNavController()
+        navController.navigate(R.id.action_login_fragment_to_navigation_map)
+    }
+
+    private fun tryAuthBySession()  {
+        val user = loginViewModel.authBySession() ?: return
+        showAuthBySessionDialog(user.login)
+    }
+
+    private fun showAuthBySessionDialog(login: String) {
+        val dialog = AlertDialog.Builder(requireContext())
+            .setMessage("Продолжить как $login?")
+            .setPositiveButton("Да") { _,_ ->
+                loginViewModel.authBySession()
+                navigateToNextFragment()
+            }
+            .setNegativeButton("Нет") { _, _ -> }
+            .create()
+        dialog.show()
+    }
+
+    private fun showSaveSessionDialog(loginOrEmail: String) {
+        val dialog = AlertDialog.Builder(requireContext())
+            .setMessage("Сохранить пользователя при выходе?")
+            .setPositiveButton("Да") { _,_ ->
+                loginViewModel.saveSession(loginOrEmail)
+            }
+            .setNegativeButton("Нет") { _, _ -> }
+            .create()
+        dialog.show()
     }
 
     private fun checkFieldsAreNotEmpty() : Boolean {
